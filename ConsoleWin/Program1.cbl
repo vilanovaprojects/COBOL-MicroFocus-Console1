@@ -76,7 +76,6 @@
 
        01 WM-00.
            03 WM00-OPC PIC X       value spaces.
-           03 WM00-ERR PIC X(74)   value spaces.
 
        01 WM-01.
          03 WM01-CIF PIC X(09)     value spaces.
@@ -84,7 +83,6 @@
          03 WM01-DIR PIC X(35)     value spaces.
          03 WM01-TLF PIC X(09)     value spaces.
          03 WM01-COR PIC X(20)     value spaces.
-         03 WM01-ERR PIC X(74)     value spaces.
 
        01 WM-02.
          03 WM02-CIF PIC X(09) value spaces.
@@ -92,7 +90,6 @@
          03 WM02-DIR PIC X(35) value spaces.
          03 WM02-TLF PIC X(09) value spaces.
          03 WM02-COR PIC X(20) value spaces.
-         03 WM02-ERR PIC X(74) value spaces.
 
        01 WM-03.
          03 WM03-FILA1 PIC X(76) value spaces.
@@ -105,7 +102,8 @@
          03 WM03-FILA8 PIC X(76) value spaces.
          03 WM03-FILA9 PIC X(76) value spaces.
          03 WM03-FILA0 PIC X(76) value spaces.
-         03 WM03-ERR   PIC X(74) value spaces.
+
+       01 MSG-ERR PIC X(74) value spaces.
 
        SCREEN SECTION.
      
@@ -126,7 +124,7 @@
          05 WI00-OPC PIC X LINE 15 COLUMN 34 USING WM00-OPC FOREGROUND-COLOR 3.
          05 LINE 22 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
          05 LINE 23 COLUMN 1 VALUE IS 'MSG:' FOREGROUND-COLOR 1.
-         05 WI00-ERR PIC X(74) LINE 23 COLUMN 6 FROM WM00-ERR FOREGROUND-COLOR 7.
+         05 WI00-ERR PIC X(74) LINE 23 COLUMN 6 FROM MSG-ERR FOREGROUND-COLOR 7.
          05 LINE 24 COLUMN 1 VALUE IS 'F3=SALIR' FOREGROUND-COLOR 1.
 
        01 MENU01.
@@ -148,7 +146,7 @@
          05 WI01-COR PIC X(20) LINE 14 COLUMN 26 USING WM01-COR FOREGROUND-COLOR 3.
          05 LINE 22 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
          05 LINE 23 COLUMN 1 VALUE IS 'MSG:' FOREGROUND-COLOR 1.
-         05 WI01-ERR PIC X(74) LINE 23 COLUMN 6 FROM WM01-ERR FOREGROUND-COLOR 7.
+         05 WI01-ERR PIC X(74) LINE 23 COLUMN 6 FROM MSG-ERR FOREGROUND-COLOR 7.
          05 LINE 24 COLUMN 1 VALUE IS 'F3=SALIR' FOREGROUND-COLOR 1.
 
        01 MENU02.
@@ -170,7 +168,7 @@
          05 WI02-COR PIC X(20) LINE 15 COLUMN 26 FROM WM02-COR FOREGROUND-COLOR 14.
          05 LINE 22 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
          05 LINE 23 COLUMN 1 VALUE IS 'MSG:' FOREGROUND-COLOR 1.
-         05 WI02-ERR PIC X(74) LINE 23 COLUMN 6 FROM WM02-ERR FOREGROUND-COLOR 7.
+         05 WI02-ERR PIC X(74) LINE 23 COLUMN 6 FROM MSG-ERR FOREGROUND-COLOR 7.
          05 LINE 24 COLUMN 1 VALUE IS 'F3=SALIR' FOREGROUND-COLOR 1.
 
        01 MENU03.
@@ -196,7 +194,7 @@
          05 WI03-FILA0 PIC X(76) LINE 19 COLUMN 1 FROM WM03-FILA0 FOREGROUND-COLOR 7.
          05 LINE 22 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
          05 LINE 23 COLUMN 1 VALUE IS 'MSG:' FOREGROUND-COLOR 1.
-         05 WI03-ERR PIC X(74) LINE 23 COLUMN 6 FROM WM03-ERR FOREGROUND-COLOR 7.
+         05 WI03-ERR PIC X(74) LINE 23 COLUMN 6 FROM MSG-ERR FOREGROUND-COLOR 7.
          05 LINE 24 COLUMN 1 VALUE IS 'F3=SALIR' FOREGROUND-COLOR 1.
          05 LINE 24 COLUMN 13 VALUE IS 'INTRO=CARGAR' FOREGROUND-COLOR 1.
          05 LINE 24 COLUMN 30 VALUE IS 'F10=RETROCEDER' FOREGROUND-COLOR 1.
@@ -236,7 +234,7 @@
 
            accept MENU00.
 
-           INITIALIZE WM00-ERR.
+           INITIALIZE MSG-ERR.
            evaluate key-type
                when 0
                    continue
@@ -257,7 +255,7 @@
                WHEN 3
                    perform PARRAFO-MENU03
                WHEN other
-                   MOVE 'INTRODUZCA UN VALOR DEL 1 AL 3' TO WM00-ERR
+                   MOVE 'INTRODUZCA UN VALOR DEL 1 AL 3' TO MSG-ERR
                    perform PARRAFO-MENU00
 
            end-evaluate.
@@ -280,7 +278,7 @@
 
            accept MENU01.
 
-           INITIALIZE WM01-ERR.
+           INITIALIZE MSG-ERR.
            evaluate key-type
                when 0
                    continue
