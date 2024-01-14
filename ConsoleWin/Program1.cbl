@@ -203,6 +203,8 @@
 
        PROCEDURE DIVISION.
 
+           GO TO PRUEBAS.
+
       *
       * EXCEPTIONES SQL DB2
            EXEC SQL
@@ -291,6 +293,38 @@
                    end-if
            end-evaluate.
 
+           exec sql
+             connect 'sa' identified by 'Pas$123456' at 'cobolDB' using 'SQLADO32'
+           end-exec
+
+           EXEC SQL
+             INSERT
+               INTO USRDATOS(
+                    CIF
+                  , NOMBRE
+                  , DIRECCION
+                  , TLF
+                  , CORREO)
+               VALUES(
+                    :WM01-CIF
+                  , :WM01-NOM
+                  , :WM01-DIR
+                  , :WM01-TLF
+                  , :WM01-COR)
+           END-EXEC.
+
+           IF SQLCODE = 0
+               MOVE 'GUARDADO CORRECTAMENTE.' TO MSG-ERR
+           ELSE
+               MOVE 'ERROR AL GUARDAR.' TO MSG-ERR
+               PERFORM G999-ERROR-DB2
+           END-IF.
+
+           exec sql
+             disconnect current
+           end-exec.
+           perform PARRAFO-MENU01.
+
 
        PARRAFO-MENU02.
            DISPLAY CLEANING.
@@ -345,24 +379,33 @@
                      
            end-evaluate.
 
-
-           
-
+       PRUEBAS.
 
            exec sql
              connect 'sa' identified by 'Pas$123456' at 'cobolDB' using 'SQLADO32'
            end-exec
 
+           move "algo" to campo1.
+       
+           EXEC SQL
+             INSERT
+               INTO Table_1 (campo11, campo22)
+               VALUES (:campo1, :campo1)
+           END-EXEC.
+
            EXEC SQL
              select
-               campo22
+               campo11, campo22
              into
                :campo1
+             , :campo2
              from Table_1
            end-exec.
 
            display "aquí debajo va el campo1:" with blank screen.
            display campo1.
+           display campo2.
+           accept campo1.
            display "*****************".
 
            exec sql
@@ -370,6 +413,14 @@
            end-exec.
 
            accept campo2.
+
+       G999-ERROR-DB2.
+           MOVE SQLCODE TO DB2-SQLCODE
+           MOVE DB2-SQLCODE TO DB2-SQLCODE-Z
+           MOVE DB2-SQLCODE-Z TO DB2-ERR-CODE
+           MOVE SQLERRMC TO DB2-ERR-MSG.
+           MOVE DB2-ERROR TO MSG-ERR.
+
 
        CERRAR-PROGRAMA.
 
