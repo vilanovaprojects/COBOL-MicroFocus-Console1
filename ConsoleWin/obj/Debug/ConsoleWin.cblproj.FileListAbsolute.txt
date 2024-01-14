@@ -1,0 +1,8 @@
+C:\Users\Moises\Documents\PROGRAMACION\MIS PROYECTOS\CobolMicroFocus\ConsoleWin\ConsoleWin\bin\Debug\ConsoleWin.exe
+C:\Users\Moises\Documents\PROGRAMACION\MIS PROYECTOS\CobolMicroFocus\ConsoleWin\ConsoleWin\bin\Debug\ConsoleWin.pdb
+C:\Users\Moises\Documents\PROGRAMACION\MIS PROYECTOS\CobolMicroFocus\ConsoleWin\ConsoleWin\bin\Debug\ConsoleWin.CobolConsole_Program1.idy
+C:\Users\Moises\Documents\PROGRAMACION\MIS PROYECTOS\CobolMicroFocus\ConsoleWin\ConsoleWin\obj\Debug\ConsoleWin.cblproj.AssemblyReference.cache
+C:\Users\Moises\Documents\PROGRAMACION\MIS PROYECTOS\CobolMicroFocus\ConsoleWin\ConsoleWin\obj\Debug\ConsoleWin.cblproj.CoreCompileInputs.cache
+C:\Users\Moises\Documents\PROGRAMACION\MIS PROYECTOS\CobolMicroFocus\ConsoleWin\ConsoleWin\obj\Debug\ConsoleWin.exe
+C:\Users\Moises\Documents\PROGRAMACION\MIS PROYECTOS\CobolMicroFocus\ConsoleWin\ConsoleWin\obj\Debug\ConsoleWin.pdb
+C:\Users\Moises\Documents\PROGRAMACION\MIS PROYECTOS\CobolMicroFocus\ConsoleWin\ConsoleWin\obj\Debug\ConsoleWin.CobolConsole_Program1.idy
