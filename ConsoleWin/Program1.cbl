@@ -198,6 +198,10 @@
 
        PROCEDURE DIVISION.
 
+           exec sql
+             connect 'sa' identified by 'Pas$123456' at 'cobolDB' using 'SQLADO32'
+           end-exec
+
            EXEC SQL
                 WHENEVER  SQLERROR    CONTINUE
            END-EXEC.
@@ -282,10 +286,6 @@
                    end-if
            end-evaluate.
 
-           exec sql
-             connect 'sa' identified by 'Pas$123456' at 'cobolDB' using 'SQLADO32'
-           end-exec
-
            EXEC SQL
              INSERT
                INTO USRDATOS(
@@ -302,7 +302,6 @@
                   , :WM-DATOS-COR)
            END-EXEC.
            EXEC SQL COMMIT END-EXEC.
-
 
 
            IF SQLCODE = 0
@@ -339,9 +338,6 @@
                    end-if
            end-evaluate.
 
-           exec sql
-             connect 'sa' identified by 'Pas$123456' at 'cobolDB' using 'SQLADO32'
-           end-exec.
 
            EXEC SQL
                 SELECT
@@ -411,10 +407,6 @@
            end-evaluate.
 
 
-           exec sql
-             connect 'sa' identified by 'Pas$123456' at 'cobolDB' using 'SQLADO32'
-           end-exec.
-
            EXEC SQL OPEN CURS1 END-EXEC.
 
       *    BUCLE PARA F4 F5
@@ -479,48 +471,4 @@
 
            STOP RUN.
 
-       PRUEBAS.
 
-           move "algo" to campo1.
-
-           exec sql
-             connect 'sa' identified by 'Pas$123456' at 'cobolDB' using 'SQLADO32'
-           end-exec
-
-           EXEC SQL
-
-             INSERT
-               INTO Table_1 (campo11, campo22)
-               VALUES (:campo1, :campo1)
-
-           END-EXEC.
-
-           EXEC SQL COMMIT END-EXEC.
-
-           EXEC SQL WHEN SQLERROR
-           DISPLAY "Error SQL: " SQLCODE
-           DISPLAY "Mensaje de Error: " SQLERRM
-           end-exec.
-           accept campo1
-
-           EXEC SQL
-             select
-               campo11, campo22
-             into
-               :campo1
-             , :campo2
-             from Table_1
-           end-exec.
-
-           display "aquí debajo va el campo1:".
-           display campo1.
-           display SQLERRM
-           display campo2.
-           accept campo1.
-           display "*****************".
-
-           exec sql
-             disconnect current
-           end-exec.
-
-           accept campo2.
