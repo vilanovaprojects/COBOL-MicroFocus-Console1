@@ -35,31 +35,26 @@
                 INCLUDE SQLCA
            END-EXEC.
       *============================================================
-      * DECLARAMOS TABLA Y CURSOR
+      * TABLA PARA BBDD
       *============================================================
        01 TABLA.
-         02 TABLAFILA OCCURS 10 TIMES.
            03 COLCIF PIC X(9).
-           03 FILLER PIC X.
            03 COLNOM PIC X(20).
-           03 FILLER PIC X.
            03 COLDIR PIC X(35).
-           03 FILLER PIC X.
            03 COLTLF PIC X(9).
-       01 F PIC 99.
 
       *============================================================
       * ************CURSOR****************************************
       *============================================================
-      *    EXEC SQL
-      *        DECLARE CURS1 CURSOR FOR
-      *            SELECT CIF
-      *                 , NOMBRE
-      *                 , DIRECCION
-      *                 , TLF
-      *            FROM USRDATOS
-      *            ORDER BY CIF
-      *    END-EXEC.
+           EXEC SQL
+               DECLARE CURS1 CURSOR FOR
+                   SELECT CIF
+                        , NOMBRE
+                        , DIRECCION
+                        , TLF
+                   FROM USRDATOS
+                   ORDER BY CIF
+           END-EXEC.
 
       * CAMPOS PARA ERROR DE DB2
        01 FILLER PIC X(20) VALUE 'SQLER678901234567890'.
@@ -71,7 +66,7 @@
            05 DB2-ERR-CODE PIC X(20).
       *
 
-
+      * CAMPOS DE PANTALLA
        01 WM-00.
            03 WM00-OPC PIC X       value spaces.
 
@@ -82,42 +77,31 @@
          03 WM-DATOS-TLF   PIC X(09)   value spaces.
          03 WM-DATOS-COR   PIC X(20)   value spaces.
 
-       01 WM-03.
-         03 WM03-FILA1 PIC X(76)   value spaces.
-         03 WM03-FILA2 PIC X(76)   value spaces.
-         03 WM03-FILA3 PIC X(76)   value spaces.
-         03 WM03-FILA4 PIC X(76)   value spaces.
-         03 WM03-FILA5 PIC X(76)   value spaces.
-         03 WM03-FILA6 PIC X(76)   value spaces.
-         03 WM03-FILA7 PIC X(76)   value spaces.
-         03 WM03-FILA8 PIC X(76)   value spaces.
-         03 WM03-FILA9 PIC X(76)   value spaces.
-         03 WM03-FILA0 PIC X(76)   value spaces.
+       01 WM-TABLAFILA.
+         03 WM-FILA OCCURS 10 TIMES.
+           05 COLCIF PIC X(9).
+           05 FILLER PIC X.
+           05 COLNOM PIC X(20).
+           05 FILLER PIC X.
+           05 COLDIR PIC X(35).
+           05 FILLER PIC X.
+           05 COLTLF PIC X(9).
 
-       01 TABLE-1.
-         02 DEPT OCCURS 10 TIMES.
-           05 EMPNO PIC X(6).
-           05 LASTNAME.
-             49 LASTNAME-LEN PIC S9(4) BINARY.
-             49 LASTNAME-TEXT PIC X(15).
-           05 WORKDEPT PIC X(3).
-           05 JOB PIC X(8).
-       01 TABLE-2.
-         02 IND-ARRAY OCCURS 10 TIMES.
-           05 INDS PIC S9(4) BINARY OCCURS 4 TIMES.
 
+      * CAMPOS ADICIONALES
+       01 F PIC 99.
        01 comodin pic x.
        01 DATANUM PIC 999.
        01 FINCURSOR PIC X(1).
            88 FIN-CURSOR VALUE 'Y'.
            88 NFIN-CURSOR VALUE 'N'.
-
        01 MSG-ERR PIC X(74) value spaces.
 
+
+      *============================================================
+      * ************PANTALLAS**************************************
+      *============================================================
        SCREEN SECTION.
-     
-       01 CLEAR-SCREEN.
-         02 BLANK SCREEN BACKGROUND-COLOR 2 FOREGROUND-COLOR 0.
 
        01 MENU00 BLANK SCREEN.
          05 LINE 1 COLUMN 1 VALUE IS 'MENU00' FOREGROUND-COLOR 1.
@@ -191,43 +175,29 @@
          05 LINE 9 COLUMN 11 VALUE IS 'NOMBRE' FOREGROUND-COLOR 2.
          05 LINE 9 COLUMN 32 VALUE IS 'DIRECCION' FOREGROUND-COLOR 2.
          05 LINE 9 COLUMN 68 VALUE IS 'TLF' FOREGROUND-COLOR 2.
-         05 WI03-FILA1 PIC X(76) LINE 10 COLUMN 1 FROM WM03-FILA1 FOREGROUND-COLOR 7.
-         05 WI03-FILA2 PIC X(76) LINE 11 COLUMN 1 FROM WM03-FILA2 FOREGROUND-COLOR 7.
-         05 WI03-FILA3 PIC X(76) LINE 12 COLUMN 1 FROM WM03-FILA3 FOREGROUND-COLOR 7.
-         05 WI03-FILA4 PIC X(76) LINE 13 COLUMN 1 FROM WM03-FILA4 FOREGROUND-COLOR 7.
-         05 WI03-FILA5 PIC X(76) LINE 14 COLUMN 1 FROM WM03-FILA5 FOREGROUND-COLOR 7.
-         05 WI03-FILA6 PIC X(76) LINE 15 COLUMN 1 FROM WM03-FILA6 FOREGROUND-COLOR 7.
-         05 WI03-FILA7 PIC X(76) LINE 16 COLUMN 1 FROM WM03-FILA7 FOREGROUND-COLOR 7.
-         05 WI03-FILA8 PIC X(76) LINE 17 COLUMN 1 FROM WM03-FILA8 FOREGROUND-COLOR 7.
-         05 WI03-FILA9 PIC X(76) LINE 18 COLUMN 1 FROM WM03-FILA9 FOREGROUND-COLOR 7.
-         05 WI03-FILA0 PIC X(76) LINE 19 COLUMN 1 FROM WM03-FILA0 FOREGROUND-COLOR 7.
+         05 WI03-FILA1 PIC X(76) LINE 10 COLUMN 1 FROM WM-FILA(1) FOREGROUND-COLOR 7.
+         05 WI03-FILA2 PIC X(76) LINE 11 COLUMN 1 FROM WM-FILA(2) FOREGROUND-COLOR 7.
+         05 WI03-FILA3 PIC X(76) LINE 12 COLUMN 1 FROM WM-FILA(3) FOREGROUND-COLOR 7.
+         05 WI03-FILA4 PIC X(76) LINE 13 COLUMN 1 FROM WM-FILA(4) FOREGROUND-COLOR 7.
+         05 WI03-FILA5 PIC X(76) LINE 14 COLUMN 1 FROM WM-FILA(5) FOREGROUND-COLOR 7.
+         05 WI03-FILA6 PIC X(76) LINE 15 COLUMN 1 FROM WM-FILA(6) FOREGROUND-COLOR 7.
+         05 WI03-FILA7 PIC X(76) LINE 16 COLUMN 1 FROM WM-FILA(7) FOREGROUND-COLOR 7.
+         05 WI03-FILA8 PIC X(76) LINE 17 COLUMN 1 FROM WM-FILA(8) FOREGROUND-COLOR 7.
+         05 WI03-FILA9 PIC X(76) LINE 18 COLUMN 1 FROM WM-FILA(9) FOREGROUND-COLOR 7.
+         05 WI03-FILA0 PIC X(76) LINE 19 COLUMN 1 FROM WM-FILA(10) FOREGROUND-COLOR 7.
          05 LINE 22 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
          05 LINE 23 COLUMN 1 VALUE IS 'MSG:' FOREGROUND-COLOR 1.
          05 WI03-ERR PIC X(74) LINE 23 COLUMN 6 FROM MSG-ERR FOREGROUND-COLOR 7.
          05 LINE 24 COLUMN 1 VALUE IS 'F3=SALIR' FOREGROUND-COLOR 1.
          05 LINE 24 COLUMN 13 VALUE IS 'INTRO=CARGAR' FOREGROUND-COLOR 1.
-         05 LINE 24 COLUMN 30 VALUE IS 'F10=RETROCEDER' FOREGROUND-COLOR 1.
-         05 LINE 24 COLUMN 47 VALUE IS 'F11=SIGUIENTES' FOREGROUND-COLOR 1.
-         05 WI02-CIF PIC X(1) LINE 21 COLUMN 26 USING comodin FOREGROUND-COLOR 0.
+         05 LINE 24 COLUMN 30 VALUE IS 'F4=RETROCEDER' FOREGROUND-COLOR 1.
+         05 LINE 24 COLUMN 47 VALUE IS 'F5=SIGUIENTES' FOREGROUND-COLOR 1.
+         05 WI02-CIF PIC X(1) LINE 21 COLUMN 1 USING comodin FOREGROUND-COLOR 0.
 
 
 
        PROCEDURE DIVISION.
 
-      *    GO TO PRUEBAS.
-
-      *    EXEC SQL
-      *        DECLARE CURS1 CURSOR FOR
-      *            SELECT CIF
-      *                 , NOMBRE
-      *                 , DIRECCION
-      *                 , TLF
-      *            FROM USRDATOS
-      *            ORDER BY CIF
-      *    END-EXEC.
-
-      *
-      * EXCEPTIONES SQL DB2
            EXEC SQL
                 WHENEVER  SQLERROR    CONTINUE
            END-EXEC.
@@ -275,7 +245,7 @@
                    initialize WM-DATOS
                    perform PARRAFO-MENU02
                WHEN 3
-                   initialize WM-03
+                   initialize WM-TABLAFILA
                    perform PARRAFO-MENU03
                WHEN other
                    MOVE 'INTRODUZCA UN VALOR DEL 1 AL 3' TO MSG-ERR
@@ -283,9 +253,6 @@
 
            end-evaluate.
 
-       OTHER-PARRAFO.
-       DISPLAY CLEANING.
-           stop "PAUSA".
 
       *============================================================
       * -----------MENU01-----------------------------------------
@@ -345,9 +312,6 @@
                PERFORM G999-ERROR-DB2
            END-IF.
 
-           exec sql
-             disconnect current
-           end-exec.
            perform PARRAFO-MENU01.
 
 
@@ -433,68 +397,87 @@
                    evaluate key-code-1
                        when 3
                            perform PARRAFO-MENU00
-                       when 10
-                           IF NFIN-CURSOR
-                               ADD 10 TO DATANUM
-                           END-IF
-                       when 11
+                       when 4
                            IF DATANUM > 0
                                SUBTRACT 10 FROM DATANUM GIVING DATANUM
+                           END-IF
+                       when 5
+                           IF NFIN-CURSOR
+                               ADD 10 TO DATANUM
                            END-IF
                        when other
                            continue
                    end-evaluate
            end-evaluate.
 
-           EXEC SQL
-               DECLARE CURS1 CURSOR FOR
-                   SELECT CIF
-                        , NOMBRE
-                        , DIRECCION
-                        , TLF
-                   FROM USRDATOS
-                   ORDER BY CIF
-           END-EXEC.
+
+           exec sql
+             connect 'sa' identified by 'Pas$123456' at 'cobolDB' using 'SQLADO32'
+           end-exec.
 
            EXEC SQL OPEN CURS1 END-EXEC.
 
-           EXEC SQL
-             FETCH FROM CURS1 INTO :WM03-FILA1, :WM03-FILA2       
-                    , :WM03-FILA2, :WM03-FILA4
-           END-EXEC.
+      *    BUCLE PARA F4 F5
+           PERFORM DATANUM TIMES
+               EXEC SQL
+                 FETCH CURS1 INTO :TABLA
+               END-EXEC
+           END-PERFORM.
 
+      *    INICIALIZAR Y RELLENAR TABLA
+           MOVE 1 TO F.
+           SET NFIN-CURSOR TO TRUE.
+           INITIALIZE WM-TABLAFILA.
+           PERFORM READCURS UNTIL FIN-CURSOR OR F EQUAL 11.
+
+
+           EXEC SQL CLOSE CURS1 END-EXEC.
 
            perform PARRAFO-MENU03.
 
-       Leer-base-de-datos.
-
-
-       enable-keys.
        
-       call x"af" using flag
-                            user-key-control.
-       accept-function-key.
-       
-       display spaces upon crt
-       display "Press a function key: F1 to F10" at 0505
- 
-      *accept any-data at 0540.
-       accept any-data at 0540.
-       tell-which-key-was-pressed.
-       
-       evaluate key-type
+       READCURS.
+           INITIALIZE TABLA.
 
-           when 0
-              display "You pressed <Enter>" at 0705
+           EXEC SQL
+             FETCH CURS1 INTO :TABLA
+           END-EXEC.
 
-           when 1
-             move key-code-1 to key-code-1-display
-                  
-                   display "You pressed function key" at 0705
-                     
-                   display key-code-1-display at 0730
-                     
-           end-evaluate.
+      * RECUPERAR ERROR DE DB2
+           IF SQLCODE > 100
+               PERFORM G999-ERROR-DB2
+           END-IF.
+
+      * RELLANAR EL ARRAY
+
+           MOVE CORRESPONDING TABLA TO WM-FILA(F).
+           ADD 1 TO F.
+
+      *    perform Leer-base-de-datos.
+
+           EVALUATE SQLCODE
+               WHEN 0
+                   SET NFIN-CURSOR TO TRUE
+               WHEN 100
+                   SET FIN-CURSOR TO TRUE
+           END-EVALUATE.
+
+
+       G999-ERROR-DB2.
+           MOVE SQLCODE TO DB2-SQLCODE
+           MOVE DB2-SQLCODE TO DB2-SQLCODE-Z
+           MOVE DB2-SQLCODE-Z TO DB2-ERR-CODE
+           MOVE SQLERRMC TO DB2-ERR-MSG.
+           MOVE DB2-ERROR TO MSG-ERR.
+
+
+       CERRAR-PROGRAMA.
+
+           exec sql
+             disconnect current
+           end-exec.
+
+           STOP RUN.
 
        PRUEBAS.
 
@@ -503,18 +486,16 @@
            exec sql
              connect 'sa' identified by 'Pas$123456' at 'cobolDB' using 'SQLADO32'
            end-exec
-       
+
            EXEC SQL
-            
+
              INSERT
                INTO Table_1 (campo11, campo22)
                VALUES (:campo1, :campo1)
 
-
            END-EXEC.
 
            EXEC SQL COMMIT END-EXEC.
-
 
            EXEC SQL WHEN SQLERROR
            DISPLAY "Error SQL: " SQLCODE
@@ -543,15 +524,3 @@
            end-exec.
 
            accept campo2.
-
-       G999-ERROR-DB2.
-           MOVE SQLCODE TO DB2-SQLCODE
-           MOVE DB2-SQLCODE TO DB2-SQLCODE-Z
-           MOVE DB2-SQLCODE-Z TO DB2-ERR-CODE
-           MOVE SQLERRMC TO DB2-ERR-MSG.
-           MOVE DB2-ERROR TO MSG-ERR.
-
-
-       CERRAR-PROGRAMA.
-
-           STOP RUN.
