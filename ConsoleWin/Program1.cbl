@@ -1,5 +1,6 @@
       $set ilusing"System.Configuration"
       $set ilusing"System.Data.SqlClient"
+
        id division.
        program-id. Program1 as "CobolConsole.Program1".
        special-names.
@@ -74,19 +75,12 @@
        01 WM-00.
            03 WM00-OPC PIC X       value spaces.
 
-       01 WM-01.
-         03 WM01-CIF   PIC X(09)   value spaces.
-         03 WM01-NOM   PIC X(20)   value spaces.
-         03 WM01-DIR   PIC X(35)   value spaces.
-         03 WM01-TLF   PIC X(09)   value spaces.
-         03 WM01-COR   PIC X(20)   value spaces.
-
-       01 WM-02.
-         03 WM02-CIF   PIC X(09)   value spaces.
-         03 WM02-NOM   PIC X(20)   value spaces.
-         03 WM02-DIR   PIC X(35)   value spaces.
-         03 WM02-TLF   PIC X(09)   value spaces.
-         03 WM02-COR   PIC X(20)   value spaces.
+       01 WM-DATOS.
+         03 WM-DATOS-CIF   PIC X(09)   value spaces.
+         03 WM-DATOS-NOM   PIC X(20)   value spaces.
+         03 WM-DATOS-DIR   PIC X(35)   value spaces.
+         03 WM-DATOS-TLF   PIC X(09)   value spaces.
+         03 WM-DATOS-COR   PIC X(20)   value spaces.
 
        01 WM-03.
          03 WM03-FILA1 PIC X(76)   value spaces.
@@ -125,7 +119,7 @@
        01 CLEAR-SCREEN.
          02 BLANK SCREEN BACKGROUND-COLOR 2 FOREGROUND-COLOR 0.
 
-       01 MENU00.
+       01 MENU00 BLANK SCREEN.
          05 LINE 1 COLUMN 1 VALUE IS 'MENU00' FOREGROUND-COLOR 1.
          05 LINE 1 COLUMN 65 VALUE IS 'VER: 08/07/2023' FOREGROUND-COLOR 1.
          05 LINE 2 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
@@ -142,7 +136,7 @@
          05 WI00-ERR PIC X(74) LINE 23 COLUMN 6 FROM MSG-ERR FOREGROUND-COLOR 7.
          05 LINE 24 COLUMN 1 VALUE IS 'F3=SALIR' FOREGROUND-COLOR 1.
 
-       01 MENU01.
+       01 MENU01 BLANK SCREEN.
          05 LINE 1 COLUMN 1 VALUE IS 'MENU01' FOREGROUND-COLOR 1.
          05 LINE 1 COLUMN 65 VALUE IS 'VER: 08/07/2023' FOREGROUND-COLOR 1.
          05 LINE 2 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
@@ -150,21 +144,21 @@
          05 LINE 4 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
          05 LINE 7 COLUMN 26 VALUE IS 'NUEVO REGISTRO' FOREGROUND-COLOR 2.
          05 LINE 10 COLUMN 21 VALUE IS 'CIF:' FOREGROUND-COLOR 2.
-         05 WI01-CIF PIC X(9) LINE 10 COLUMN 26 USING WM01-CIF FOREGROUND-COLOR 3.
+         05 WI01-CIF PIC X(9) LINE 10 COLUMN 26 USING WM-DATOS-CIF FOREGROUND-COLOR 3.
          05 LINE 11 COLUMN 10 VALUE IS '        NOMBRE:' FOREGROUND-COLOR 2.
-         05 WI01-NOM PIC X(20) LINE 11 COLUMN 26 USING WM01-NOM FOREGROUND-COLOR 3.
+         05 WI01-NOM PIC X(20) LINE 11 COLUMN 26 USING WM-DATOS-NOM FOREGROUND-COLOR 3.
          05 LINE 12 COLUMN 10 VALUE IS '     DIRECCIÓN:' FOREGROUND-COLOR 2.
-         05 WI01-DIR PIC X(35) LINE 12 COLUMN 26 USING WM01-DIR FOREGROUND-COLOR 3.
+         05 WI01-DIR PIC X(35) LINE 12 COLUMN 26 USING WM-DATOS-DIR FOREGROUND-COLOR 3.
          05 LINE 13 COLUMN 10 VALUE IS '           TLF:' FOREGROUND-COLOR 2.
-         05 WI01-TLF PIC X(9) LINE 13 COLUMN 26 USING WM01-TLF FOREGROUND-COLOR 3.
+         05 WI01-TLF PIC X(9) LINE 13 COLUMN 26 USING WM-DATOS-TLF FOREGROUND-COLOR 3.
          05 LINE 14 COLUMN 10 VALUE IS '        CORREO:' FOREGROUND-COLOR 2.
-         05 WI01-COR PIC X(20) LINE 14 COLUMN 26 USING WM01-COR FOREGROUND-COLOR 3.
+         05 WI01-COR PIC X(20) LINE 14 COLUMN 26 USING WM-DATOS-COR FOREGROUND-COLOR 3.
          05 LINE 22 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
          05 LINE 23 COLUMN 1 VALUE IS 'MSG:' FOREGROUND-COLOR 1.
          05 WI01-ERR PIC X(74) LINE 23 COLUMN 6 FROM MSG-ERR FOREGROUND-COLOR 7.
          05 LINE 24 COLUMN 1 VALUE IS 'F3=SALIR' FOREGROUND-COLOR 1.
 
-       01 MENU02.
+       01 MENU02 BLANK SCREEN.
          05 LINE 1 COLUMN 1 VALUE IS 'MENU02' FOREGROUND-COLOR 1.
          05 LINE 1 COLUMN 65 VALUE IS 'VER: 08/07/2023' FOREGROUND-COLOR 1.
          05 LINE 2 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
@@ -172,21 +166,21 @@
          05 LINE 4 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
          05 LINE 7 COLUMN 26 VALUE IS 'BUSCAR REGISTRO' FOREGROUND-COLOR 2.
          05 LINE 10 COLUMN 7 VALUE IS 'INTRODUZCA EL CIF:' FOREGROUND-COLOR 2.
-         05 WI02-CIF PIC X(9) LINE 10 COLUMN 26 USING WM02-CIF FOREGROUND-COLOR 3.
+         05 WI02-CIF PIC X(9) LINE 10 COLUMN 26 USING WM-DATOS-CIF FOREGROUND-COLOR 3.
          05 LINE 12 COLUMN 10 VALUE IS '        NOMBRE:' FOREGROUND-COLOR 2.
-         05 WI02-NOM PIC X(20) LINE 12 COLUMN 26 FROM WM02-NOM FOREGROUND-COLOR 14.
+         05 WI02-NOM PIC X(20) LINE 12 COLUMN 26 FROM WM-DATOS-NOM FOREGROUND-COLOR 14.
          05 LINE 13 COLUMN 10 VALUE IS '     DIRECCION:' FOREGROUND-COLOR 2.
-         05 WI02-DIR PIC X(35) LINE 13 COLUMN 26 FROM WM02-DIR FOREGROUND-COLOR 14.
+         05 WI02-DIR PIC X(35) LINE 13 COLUMN 26 FROM WM-DATOS-DIR FOREGROUND-COLOR 14.
          05 LINE 14 COLUMN 10 VALUE IS '           TLF:' FOREGROUND-COLOR 2.
-         05 WI02-TLF PIC X(9) LINE 14 COLUMN 26 FROM WM02-TLF FOREGROUND-COLOR 14.
+         05 WI02-TLF PIC X(9) LINE 14 COLUMN 26 FROM WM-DATOS-TLF FOREGROUND-COLOR 14.
          05 LINE 15 COLUMN 10 VALUE IS '        CORREO:' FOREGROUND-COLOR 2.
-         05 WI02-COR PIC X(20) LINE 15 COLUMN 26 FROM WM02-COR FOREGROUND-COLOR 14.
+         05 WI02-COR PIC X(20) LINE 15 COLUMN 26 FROM WM-DATOS-COR FOREGROUND-COLOR 14.
          05 LINE 22 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
          05 LINE 23 COLUMN 1 VALUE IS 'MSG:' FOREGROUND-COLOR 1.
          05 WI02-ERR PIC X(74) LINE 23 COLUMN 6 FROM MSG-ERR FOREGROUND-COLOR 7.
          05 LINE 24 COLUMN 1 VALUE IS 'F3=SALIR' FOREGROUND-COLOR 1.
 
-       01 MENU03.
+       01 MENU03 BLANK SCREEN.
          05 LINE 1 COLUMN 1 VALUE IS 'MENU03' FOREGROUND-COLOR 1.
          05 LINE 1 COLUMN 65 VALUE IS 'VER: 08/07/2023' FOREGROUND-COLOR 1.
          05 LINE 2 COLUMN 1 VALUE IS '-------------------------------------------------------------------------------' FOREGROUND-COLOR 1.
@@ -222,15 +216,15 @@
 
       *    GO TO PRUEBAS.
 
-           EXEC SQL
-               DECLARE CURS1 CURSOR FOR
-                   SELECT CIF
-                        , NOMBRE
-                        , DIRECCION
-                        , TLF
-                   FROM USRDATOS
-                   ORDER BY CIF
-           END-EXEC.
+      *    EXEC SQL
+      *        DECLARE CURS1 CURSOR FOR
+      *            SELECT CIF
+      *                 , NOMBRE
+      *                 , DIRECCION
+      *                 , TLF
+      *            FROM USRDATOS
+      *            ORDER BY CIF
+      *    END-EXEC.
 
       *
       * EXCEPTIONES SQL DB2
@@ -251,11 +245,8 @@
       *============================================================
        PARRAFO-MENU00.
 
-           DISPLAY CLEANING.
            initialize WM00-OPC.
 
-    
-       
            call x"af" using flag
                             user-key-control.
 
@@ -278,10 +269,13 @@
 
            evaluate WM00-OPC
                WHEN 1
+                   initialize WM-DATOS
                    perform PARRAFO-MENU01
                WHEN 2
+                   initialize WM-DATOS
                    perform PARRAFO-MENU02
                WHEN 3
+                   initialize WM-03
                    perform PARRAFO-MENU03
                WHEN other
                    MOVE 'INTRODUZCA UN VALOR DEL 1 AL 3' TO MSG-ERR
@@ -297,8 +291,9 @@
       * -----------MENU01-----------------------------------------
       *============================================================
        PARRAFO-MENU01.
-           DISPLAY CLEANING.
-           initialize WM-01.
+
+.
+           initialize WM-DATOS.
 
            call x"af" using flag
                             user-key-control.
@@ -333,11 +328,11 @@
                   , TLF
                   , CORREO)
                VALUES(
-                    :WM01-CIF
-                  , :WM01-NOM
-                  , :WM01-DIR
-                  , :WM01-TLF
-                  , :WM01-COR)
+                    :WM-DATOS-CIF
+                  , :WM-DATOS-NOM
+                  , :WM-DATOS-DIR
+                  , :WM-DATOS-TLF
+                  , :WM-DATOS-COR)
            END-EXEC.
            EXEC SQL COMMIT END-EXEC.
 
@@ -360,8 +355,6 @@
       * -----------MENU02-----------------------------------------
       *============================================================
        PARRAFO-MENU02.
-           DISPLAY CLEANING.
-
            call x"af" using flag
                             user-key-control.
 
@@ -394,13 +387,13 @@
                    , TLF
                    , CORREO
                 INTO
-                     :WM02-CIF
-                   , :WM02-NOM
-                   , :WM02-DIR
-                   , :WM02-TLF
-                   , :WM02-COR
+                     :WM-DATOS-CIF
+                   , :WM-DATOS-NOM
+                   , :WM-DATOS-DIR
+                   , :WM-DATOS-TLF
+                   , :WM-DATOS-COR
                 FROM USRDATOS
-                WHERE CIF = :WM02-CIF
+                WHERE CIF = :WM-DATOS-CIF
            END-EXEC.
 
            EVALUATE TRUE
@@ -409,7 +402,7 @@
 
                WHEN SQLCODE = +100
                    MOVE 'LA EMPRESA NO EXISTE.' TO MSG-ERR
-                   initialize WM-02
+                   initialize WM-DATOS
 
                WHEN OTHER
       *            RECUPERAR POSIBLE ERROR DE DB2
@@ -423,7 +416,6 @@
       * -----------MENU03-----------------------------------------
       *============================================================
        PARRAFO-MENU03.
-           DISPLAY CLEANING.
 
            call x"af" using flag
                             user-key-control.
@@ -450,10 +442,19 @@
                                SUBTRACT 10 FROM DATANUM GIVING DATANUM
                            END-IF
                        when other
-                           perform PARRAFO-MENU03
+                           continue
                    end-evaluate
            end-evaluate.
 
+           EXEC SQL
+               DECLARE CURS1 CURSOR FOR
+                   SELECT CIF
+                        , NOMBRE
+                        , DIRECCION
+                        , TLF
+                   FROM USRDATOS
+                   ORDER BY CIF
+           END-EXEC.
 
            EXEC SQL OPEN CURS1 END-EXEC.
 
