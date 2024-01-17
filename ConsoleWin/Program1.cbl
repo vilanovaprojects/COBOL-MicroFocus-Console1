@@ -9,9 +9,7 @@
        WORKING-STORAGE SECTION.
 
       *-----------------------*
-       01 campo1 pic x(10).
-       01 campo2 pic x(10).
-       01 CLEANING PIC X(4) VALUE "[2J".
+      *01 CLEANING PIC X(4) VALUE "[2J".
 
        01 flag pic 9(2) comp-x value 1.
        01 user-key-control.
@@ -23,8 +21,8 @@
            05 key-type pic x.
            05 key-code-1 pic 9(2) comp-x.
            05 filler pic x.
-       01 any-data pic x.
-       01 key-code-1-display pic z9.
+      *01 any-data pic x.
+      *01 key-code-1-display pic z9.
 
 
       *============================================================
@@ -39,15 +37,18 @@
       *============================================================
        01 TABLA.
            03 COLCIF PIC X(9).
+           03 FILLER PIC X.
            03 COLNOM PIC X(20).
+           03 FILLER PIC X.
            03 COLDIR PIC X(35).
+           03 FILLER PIC X.
            03 COLTLF PIC X(9).
 
       *============================================================
       * ************CURSOR****************************************
       *============================================================
            EXEC SQL
-               DECLARE CURS1 CURSOR FOR
+               DECLARE CURS1 SCROLL CURSOR FOR
                    SELECT CIF
                         , NOMBRE
                         , DIRECCION
@@ -78,24 +79,22 @@
          03 WM-DATOS-COR   PIC X(20)   value spaces.
 
        01 WM-TABLAFILA.
-         03 WM-FILA OCCURS 10 TIMES.
-           05 COLCIF PIC X(9).
-           05 FILLER PIC X.
-           05 COLNOM PIC X(20).
-           05 FILLER PIC X.
-           05 COLDIR PIC X(35).
-           05 FILLER PIC X.
-           05 COLTLF PIC X(9).
+         03 WM-FILA PIC X(76) OCCURS 10 TIMES.
+
+      * CAMPO PARA MENSAJE DE ERROR
+       01 MSG-ERR PIC X(74) value spaces.
 
 
       * CAMPOS ADICIONALES
-       01 F PIC 99.
+       01 numfila PIC 9(2) value 1.
+       01 I PIC 9(2) value 01.
        01 comodin pic x.
-       01 DATANUM PIC 999.
-       01 FINCURSOR PIC X(1).
+       01 WM-03-primeravez PIC X(1) value 'Y'.
+           88 primeravez-si VALUE 'Y'.
+           88 primeravez-no VALUE 'N'.
+       01 FINCURSOR PIC X(1) value 'N'.
            88 FIN-CURSOR VALUE 'Y'.
            88 NFIN-CURSOR VALUE 'N'.
-       01 MSG-ERR PIC X(74) value spaces.
 
 
       *============================================================
@@ -196,6 +195,7 @@
 
 
 
+
        PROCEDURE DIVISION.
 
            exec sql
@@ -213,6 +213,14 @@
            EXEC SQL
                 WHENEVER  NOT FOUND   CONTINUE
            END-EXEC.
+
+           IF SQLCODE not = 0 THEN
+               PERFORM G999-ERROR-DB2
+               display "Ha ocurrido un error en la conexión con la base de datos:"
+               display MSG-ERR
+               stop ""
+               PERFORM  CERRAR-PROGRAMA
+           END-IF.
 
       *============================================================
       * -----------MENU00-----------------------------------------
@@ -377,6 +385,12 @@
       *============================================================
        PARRAFO-MENU03.
 
+           IF primeravez-si then
+               EXEC SQL OPEN CURS1 END-EXEC
+               SET primeravez-no TO TRUE
+           END-IF.
+
+
            call x"af" using flag
                             user-key-control.
 
@@ -392,66 +406,72 @@
                when 1
                    evaluate key-code-1
                        when 3
+                           EXEC SQL CLOSE CURS1 END-EXEC
+                           SET primeravez-si TO TRUE
                            perform PARRAFO-MENU00
                        when 4
-                           IF DATANUM > 0
-                               SUBTRACT 10 FROM DATANUM GIVING DATANUM
+                           IF numfila > 10 then
+                               subtract 10 from numfila
+                               SET NFIN-CURSOR TO TRUE
                            END-IF
                        when 5
-                           IF NFIN-CURSOR
-                               ADD 10 TO DATANUM
-                           END-IF
+                           IF NFIN-CURSOR then ADD 10 to numfila END-IF
                        when other
                            continue
                    end-evaluate
            end-evaluate.
 
-
-           EXEC SQL OPEN CURS1 END-EXEC.
-
-      *    BUCLE PARA F4 F5
-           PERFORM DATANUM TIMES
-               EXEC SQL
-                 FETCH CURS1 INTO :TABLA
-               END-EXEC
-           END-PERFORM.
-
-      *    INICIALIZAR Y RELLENAR TABLA
-           MOVE 1 TO F.
-           SET NFIN-CURSOR TO TRUE.
-           INITIALIZE WM-TABLAFILA.
-           PERFORM READCURS UNTIL FIN-CURSOR OR F EQUAL 11.
-
-
-           EXEC SQL CLOSE CURS1 END-EXEC.
+           IF NFIN-CURSOR then
+               perform LEER-CARGAR-REGISTRO
+           END-IF.
 
            perform PARRAFO-MENU03.
 
+  
+
+
        
-       READCURS.
-           INITIALIZE TABLA.
+       LEER-CARGAR-REGISTRO.
 
-           EXEC SQL
-             FETCH CURS1 INTO :TABLA
-           END-EXEC.
+           INITIALIZE  TABLA
+                       WM-TABLAFILA.
+           move 1 to I.
 
-      * RECUPERAR ERROR DE DB2
-           IF SQLCODE > 100
-               PERFORM G999-ERROR-DB2
+      *PRIMER FETCH PARA POSICIONAR CURSOR EN numfila
+           IF NFIN-CURSOR then
+               EXEC SQL
+                 FETCH ABSOLUTE :numfila
+                 FROM CURS1 INTO :COLCIF, :COLNOM, :COLDIR, :COLTLF
+               END-EXEC
+               PERFORM EVALUAR-FINAL
+               perform CARGAR-REGISTRO
+           END-IF
+
+           PERFORM UNTIL FIN-CURSOR OR I > 10
+               EXEC SQL
+                   FETCH CURS1 INTO :COLCIF, :COLNOM, :COLDIR, :COLTLF
+               END-EXEC
+               PERFORM EVALUAR-FINAL
+               perform CARGAR-REGISTRO
+           END-PERFORM.
+
+       CARGAR-REGISTRO.
+           IF NFIN-CURSOR then
+               MOVE TABLA TO WM-FILA(I)
+               ADD 1 to I
            END-IF.
+           
 
-      * RELLANAR EL ARRAY
-
-           MOVE CORRESPONDING TABLA TO WM-FILA(F).
-           ADD 1 TO F.
-
-      *    perform Leer-base-de-datos.
+           
+       EVALUAR-FINAL.
 
            EVALUATE SQLCODE
                WHEN 0
                    SET NFIN-CURSOR TO TRUE
                WHEN 100
                    SET FIN-CURSOR TO TRUE
+               WHEN other
+                   PERFORM G999-ERROR-DB2
            END-EVALUATE.
 
 
