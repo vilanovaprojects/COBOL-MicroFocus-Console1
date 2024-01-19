@@ -1,3 +1,6 @@
 Key function:
 https://www.microfocus.com/documentation/net-express/nx30books/ciadis.htm
 https://www.microfocus.com/documentation/object-cobol/ocu42/uisckb.htm
+
+OpenESQL:
+https://www.youtube.com/watch?v=EZrotnzAJ5o&t=362s
