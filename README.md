@@ -11,6 +11,7 @@
 - First step. Install MSSQL database and run “DATA” file as SQL statements. I recommend doing it with SQL Server Management Studio.
 - Second step. Install Visual studio.
 - Third step. Install Visual cobol from Microfocus. You can download the trial version.
+- Configure SQL connection (Micro Focus ADO.NET Connection Editor)
 
 - Finally: Run ConsoleWin.sln, and compile the program :)
 
